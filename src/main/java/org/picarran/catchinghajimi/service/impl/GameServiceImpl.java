@@ -1,12 +1,12 @@
-package org.picarran.mycathome.service.impl;
+package org.picarran.catchinghajimi.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.picarran.mycathome.entity.GameRecordDO;
-import org.picarran.mycathome.entity.GameState;
-import org.picarran.mycathome.entity.Point;
-import org.picarran.mycathome.mapper.GameRecordMapper;
-import org.picarran.mycathome.service.GameService;
+import org.picarran.catchinghajimi.entity.GameRecordDO;
+import org.picarran.catchinghajimi.entity.GameState;
+import org.picarran.catchinghajimi.entity.Point;
+import org.picarran.catchinghajimi.mapper.GameRecordMapper;
+import org.picarran.catchinghajimi.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

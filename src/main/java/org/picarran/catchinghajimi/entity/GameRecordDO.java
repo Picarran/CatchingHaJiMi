@@ -1,4 +1,4 @@
-package org.picarran.mycathome.entity;
+package org.picarran.catchinghajimi.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

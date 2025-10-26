@@ -1,7 +1,7 @@
-package org.picarran.mycathome.controller;
+package org.picarran.catchinghajimi.controller;
 
-import org.picarran.mycathome.entity.UserDO;
-import org.picarran.mycathome.service.UserService;
+import org.picarran.catchinghajimi.entity.UserDO;
+import org.picarran.catchinghajimi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

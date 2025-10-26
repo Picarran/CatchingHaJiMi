@@ -1,6 +1,6 @@
-package org.picarran.mycathome.service;
+package org.picarran.catchinghajimi.service;
 
-import org.picarran.mycathome.entity.GameState;
+import org.picarran.catchinghajimi.entity.GameState;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;

@@ -1,6 +1,6 @@
-package org.picarran.mycathome.config;
+package org.picarran.catchinghajimi.config;
 
-import org.picarran.mycathome.entity.UserDO;
+import org.picarran.catchinghajimi.entity.UserDO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 

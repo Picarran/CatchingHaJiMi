@@ -1,4 +1,4 @@
-package org.picarran.mycathome.entity;
+package org.picarran.catchinghajimi.entity;
 
 public class Point {
     private int r;

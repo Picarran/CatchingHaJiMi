@@ -1,6 +1,5 @@
-package org.picarran.mycathome.entity;
+package org.picarran.catchinghajimi.entity;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.List;
 

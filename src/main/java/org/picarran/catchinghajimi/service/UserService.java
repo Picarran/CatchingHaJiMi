@@ -1,6 +1,6 @@
-package org.picarran.mycathome.service;
+package org.picarran.catchinghajimi.service;
 
-import org.picarran.mycathome.entity.UserDO;
+import org.picarran.catchinghajimi.entity.UserDO;
 
 public interface UserService {
     void register(String username, String password, String nickname);

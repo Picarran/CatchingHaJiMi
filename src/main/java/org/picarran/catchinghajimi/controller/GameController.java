@@ -1,9 +1,9 @@
-package org.picarran.mycathome.controller;
+package org.picarran.catchinghajimi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.picarran.mycathome.entity.GameState;
-import org.picarran.mycathome.entity.UserDO;
-import org.picarran.mycathome.service.GameService;
+import org.picarran.catchinghajimi.entity.GameState;
+import org.picarran.catchinghajimi.entity.UserDO;
+import org.picarran.catchinghajimi.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

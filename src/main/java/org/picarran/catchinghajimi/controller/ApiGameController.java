@@ -1,7 +1,7 @@
-package org.picarran.mycathome.controller;
+package org.picarran.catchinghajimi.controller;
 
-import org.picarran.mycathome.entity.GameState;
-import org.picarran.mycathome.service.GameService;
+import org.picarran.catchinghajimi.entity.GameState;
+import org.picarran.catchinghajimi.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

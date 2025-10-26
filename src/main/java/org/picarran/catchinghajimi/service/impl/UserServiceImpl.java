@@ -1,8 +1,8 @@
-package org.picarran.mycathome.service.impl;
+package org.picarran.catchinghajimi.service.impl;
 
-import org.picarran.mycathome.entity.UserDO;
-import org.picarran.mycathome.mapper.UserMapper;
-import org.picarran.mycathome.service.UserService;
+import org.picarran.catchinghajimi.entity.UserDO;
+import org.picarran.catchinghajimi.mapper.UserMapper;
+import org.picarran.catchinghajimi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

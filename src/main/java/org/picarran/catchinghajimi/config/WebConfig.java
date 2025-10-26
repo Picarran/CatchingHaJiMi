@@ -1,4 +1,4 @@
-package org.picarran.mycathome.config;
+package org.picarran.catchinghajimi.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

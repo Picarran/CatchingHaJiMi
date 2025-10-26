@@ -1,8 +1,8 @@
-package org.picarran.mycathome.mapper;
+package org.picarran.catchinghajimi.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.picarran.mycathome.entity.UserDO;
+import org.picarran.catchinghajimi.entity.UserDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 @Mapper
