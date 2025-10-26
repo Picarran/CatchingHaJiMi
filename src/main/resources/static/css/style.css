@@ -1,0 +1,9 @@
+body{font-family: Arial, Helvetica, sans-serif; background:#f8f8f8;}
+.container{width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:6px}
+.grid{display:flex;flex-wrap:wrap;width:550px}
+.cell{width:40px;height:40px;box-sizing:border-box;border:1px solid #eee;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.dot{width:20px;height:20px;border-radius:50%;background:#ddd}
+.dot.blocked{background:#333}
+.dot.cat{background:#ff8800;background-image:url('/img/cat.png');background-size:contain;background-repeat:no-repeat}
+.modal{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center}
+.modal-content{background:#fff;padding:20px;border-radius:6px}

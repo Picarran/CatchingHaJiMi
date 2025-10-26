@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard - 点格子困猫</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <h1>欢迎，<span th:text="${user.nickname} ?: ${user.username}"></span></h1>
+    <p><a th:href="@{/game/start}">开始新游戏</a></p>
+    <p><a th:href="@{/user/login}">登出（刷新会话以退出）</a></p>
+</div>
+</body>
+</html>
