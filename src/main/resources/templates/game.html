@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8" />
     <title>游戏 - 点格子困猫</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
+
 <body>
-<div class="container">
-    <h1>逮捕哈基米</h1>
+    <div class="container">
+        <h1>逮捕哈基米</h1>
 
-    <div id="game-area"></div>
-
-    <div id="modal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <p id="modal-text"></p>
-            <button id="to-dashboard">返回 Dashboard</button>
-            <button id="restart">再玩一次</button>
+        <div id="game-area"></div>
+        <div class="legend" aria-label="图例">
+            <span class="legend-item"><span class="dot sample cat"></span> 猫</span>
+            <span class="legend-item"><span class="dot sample blocked"></span> 阻挡</span>
+            <span class="legend-item"><span class="dot sample"></span> 空格</span>
         </div>
-    </div>
 
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        var INITIAL_MAP = /*[[${mapJson}]]*/ 'null';
-        var GAME_UUID = /*[[${gameUuid}]]*/ 'null';
-        /*]]>*/
-    </script>
-    <script th:src="@{/js/game.js}"></script>
-</div>
+        <div id="modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <p id="modal-text"></p>
+                <div class="row">
+                    <button id="to-dashboard" class="btn btn-outline">返回 Dashboard</button>
+                    <button id="restart" class="btn btn-primary">再玩一次</button>
+                </div>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var INITIAL_MAP = /*[[${mapJson}]]*/ 'null';
+            var GAME_UUID = /*[[${gameUuid}]]*/ 'null';
+            /*]]>*/
+        </script>
+        <script th:src="@{/js/game.js}"></script>
+    </div>
 </body>
+
 </html>

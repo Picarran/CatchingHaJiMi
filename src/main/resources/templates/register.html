@@ -1,20 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8" />
     <title>注册 - 逮捕哈基米</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
+
 <body>
-<div class="container">
-    <h1>注册</h1>
-    <form method="post" th:action="@{/user/register}">
-        <label>用户名: <input type="text" name="username"/></label><br/>
-        <label>密码: <input type="password" name="password"/></label><br/>
-        <label>昵称: <input type="text" name="nickname"/></label><br/>
-        <button type="submit">注册</button>
-    </form>
-    <p>已有账号？ <a th:href="@{/user/login}">登录</a></p>
-</div>
+    <div class="container">
+        <h1>注册</h1>
+        <form method="post" th:action="@{/user/register}">
+            <label>用户名
+                <input type="text" name="username" placeholder="请输入用户名" />
+            </label>
+            <label>密码
+                <input type="password" name="password" placeholder="请输入密码" />
+            </label>
+            <label>昵称
+                <input type="text" name="nickname" placeholder="展示昵称（可选）" />
+            </label>
+            <div class="row">
+                <button type="submit" class="btn btn-primary">注册</button>
+                <a class="btn btn-outline" th:href="@{/user/login}">登录</a>
+            </div>
+        </form>
+        <p class="muted">已有账号？点击登录返回登录页</p>
+    </div>
 </body>
+
 </html>
