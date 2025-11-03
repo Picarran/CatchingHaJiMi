@@ -4,15 +4,18 @@
 <head>
     <meta charset="UTF-8" />
     <title>登录 - 逮捕哈基米</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/style.css(v=${#dates.createNow().time})}" />
 </head>
 
 <body>
     <div class="container">
         <h1>逮捕哈基米 - 登录</h1>
+        <!-- 通用弹窗片段（仅在有 error 时显示） -->
+        <div th:replace="fragments/modal :: modal('login-error-modal', ${error} != null, null, ${error}, '知道了', null)">
+        </div>
         <form method="post" th:action="@{/user/login}">
             <label>用户名
-                <input type="text" name="username" placeholder="请输入用户名" />
+                <input type="text" name="username" placeholder="请输入用户名" th:value="${param.username}" />
             </label>
             <label>密码
                 <input type="password" name="password" placeholder="请输入密码" />
@@ -24,6 +27,7 @@
         </form>
         <p class="muted">没有账号？点击注册创建新用户</p>
     </div>
+    <script th:src="@{/js/modal.js}"></script>
 </body>
 
 </html>

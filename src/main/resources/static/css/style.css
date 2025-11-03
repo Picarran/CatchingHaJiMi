@@ -20,6 +20,12 @@
     /* red-500 */
     --ok: #10b981;
     /* emerald-500 */
+    /* board sizing */
+    --rows: 11;
+    --cols: 11;
+    --board-size: min(80vh, 70vw);
+    /* board occupies 80% height, constrained by width */
+    --cell-size: calc(var(--board-size) / var(--rows));
 }
 
 /* Base layout */
@@ -74,16 +80,16 @@ label {
 
 /* Game grid */
 .grid {
-    display: flex;
-    flex-wrap: wrap;
-    /* width is set inline by JS to cols*40px; keep it */
+    display: grid;
+    grid-template-columns: repeat(var(--cols), var(--cell-size));
+    grid-auto-rows: var(--cell-size);
     margin: 10px auto 18px;
     user-select: none;
 }
 
 .cell {
-    width: 40px;
-    height: 40px;
+    width: var(--cell-size);
+    height: var(--cell-size);
     box-sizing: border-box;
     border: 0;
     display: flex;
@@ -99,9 +105,15 @@ label {
     transform: translateY(-1px);
 }
 
+/* spacer for hidden cells (diamond holes) */
+.spacer {
+    width: var(--cell-size);
+    height: var(--cell-size);
+}
+
 .dot {
-    width: 20px;
-    height: 20px;
+    width: calc(var(--cell-size) * 0.5);
+    height: calc(var(--cell-size) * 0.5);
     border-radius: 50%;
     background: #cbd5e1;
     /* slate-300 */
@@ -121,29 +133,29 @@ label {
 }
 
 .dot.cat {
-    background: #ff8800;
-    background-image: url('/img/cat.png');
+    /* background: #ff8800; */
+    background-image: url('/img/cat.jpg');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    box-shadow: 0 0 10px rgba(245, 158, 11, .55), 0 0 0 1px rgba(255, 255, 255, .08), inset 0 2px 6px rgba(0, 0, 0, .35);
+    /* box-shadow: 0 0 10px rgba(245, 158, 11, .55), 0 0 0 1px rgba(255, 255, 255, .08), inset 0 2px 6px rgba(0, 0, 0, .35); */
     animation: catPulse 1.4s ease-in-out infinite;
 }
 
 @keyframes catPulse {
     0% {
         transform: scale(1);
-        filter: drop-shadow(0 0 0 rgba(245, 158, 11, .0));
+        filter: drop-shadow(0 0 0 rgba(255, 255, 255, .0));
     }
 
     50% {
         transform: scale(1.05);
-        filter: drop-shadow(0 0 8px rgba(245, 158, 11, .35));
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, .35));
     }
 
     100% {
         transform: scale(1);
-        filter: drop-shadow(0 0 0 rgba(245, 158, 11, .0));
+        filter: drop-shadow(0 0 0 rgba(255, 255, 255, .0));
     }
 }
 
@@ -308,6 +320,23 @@ a:hover {
     color: var(--muted);
 }
 
+/* Alerts */
+.alert {
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin: 0 0 14px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, .08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+
+.alert-error {
+    background: linear-gradient(180deg, rgba(239, 68, 68, .12), rgba(127, 29, 29, .18));
+    color: #fecaca;
+    /* red-200 */
+    border-color: rgba(239, 68, 68, .35);
+}
+
 /* Small screens */
 @media (max-width: 640px) {
     .container {
@@ -317,5 +346,196 @@ a:hover {
 
     h1 {
         font-size: 22px;
+    }
+}
+
+/* =========================
+     Hakimi meme style tweaks
+     ========================= */
+
+/* extra neon accents */
+:root {
+    --neon-pink: #ff4dbe;
+    --neon-lime: #b6ff2e;
+    --neon-cyan: #2ef1ff;
+}
+
+/* center page content and add playful overlay */
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(-45deg, transparent 0 22px, rgba(255, 255, 255, 0.035) 22px 44px);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: -1;
+}
+
+/* title becomes quirky with emojis */
+h1 {
+    text-align: center;
+    background: linear-gradient(90deg, #a78bfa, #60a5fa 60%, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+h1::before,
+h1::after {
+    display: inline-block;
+    margin: 0 .35em;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .35));
+}
+
+h1::before {
+    content: '🐱';
+    animation: bob 2.4s ease-in-out infinite;
+}
+
+h1::after {
+    content: '🚓';
+    animation: bob 2s ease-in-out .2s infinite;
+}
+
+@keyframes bob {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-4px) rotate(-6deg);
+    }
+}
+
+/* cat dot gets a more noticeable wiggle */
+.dot.cat {
+    animation: catPulse 1.4s ease-in-out infinite, wiggle 2s ease-in-out infinite;
+    outline: 2px solid rgba(255, 255, 255, .08);
+    transform-origin: 50% 80%;
+    /* pivot slightly lower for pendulum feel */
+}
+
+@keyframes wiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg) translateX(0);
+    }
+
+    10% {
+        transform: rotate(8deg) translateX(2px);
+    }
+
+    20% {
+        transform: rotate(-8deg) translateX(-2px);
+    }
+
+    35% {
+        transform: rotate(6deg) translateX(1px);
+    }
+
+    50% {
+        transform: rotate(-6deg) translateX(-1px);
+    }
+
+    65% {
+        transform: rotate(4deg) translateX(1px);
+    }
+
+    80% {
+        transform: rotate(-4deg) translateX(-1px);
+    }
+
+    90% {
+        transform: rotate(2deg) translateX(0);
+    }
+}
+
+/* bolder hover for buttons */
+button:hover,
+.btn:hover,
+a.btn:hover {
+    transform: translateY(-1px) rotate(-1deg);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, .25), 0 0 0 2px rgba(255, 255, 255, .06) inset;
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%),
+        radial-gradient(60% 80% at 80% 0%, rgba(255, 255, 255, .18), transparent 60%);
+}
+
+.btn-outline:hover {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+}
+
+.btn-danger:hover {
+    filter: saturate(1.2) contrast(1.1);
+}
+
+/* legend blocked sample more comic */
+.legend .dot.sample.blocked {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, .6), inset 0 3px 6px rgba(0, 0, 0, .55);
+}
+
+/* Ensure cat uses custom image and no fallback tint */
+.grid .dot.cat {
+    background: url('/img/cat.jpg') center/contain no-repeat transparent !important;
+}
+
+/* Game page layout */
+.game-container {
+    overflow: hidden;
+    margin: 0 auto;
+    width: 100%;
+    max-width: min(92vw, 1400px);
+}
+
+.game-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    /* allow wrap to avoid overlap on tight widths */
+}
+
+.board-wrap {
+    flex: 0 0 auto;
+}
+
+.side-panel {
+    flex: 0 1 360px;
+    max-width: min(28vw, 380px);
+}
+
+.side-panel h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+    color: #eaeefb;
+}
+
+.side-panel p {
+    margin: 0 0 10px;
+}
+
+@media (max-width: 960px) {
+    .game-layout {
+        flex-direction: column;
+    }
+
+    .side-panel {
+        max-width: 92vw;
+        text-align: center;
     }
 }

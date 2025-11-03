@@ -18,29 +18,37 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/user/login")
-    public String loginPage(){ return "login"; }
+    public String loginPage() {
+        return "login";
+    }
 
     @PostMapping("/user/login")
-    public String doLogin(HttpServletRequest req, String username, String password, Model model){
+    public String doLogin(HttpServletRequest req, String username, String password, Model model) {
         UserDO u = userService.loginByUsername(username, password);
-        if(u==null){ model.addAttribute("error","用户名或密码错误"); return "login"; }
+        if (u == null) {
+            model.addAttribute("error", "用户名或密码错误");
+
+            return "login";
+        }
         HttpSession session = req.getSession();
         session.setAttribute("loginUser", u);
         return "redirect:/dashboard";
     }
 
     @GetMapping("/user/register")
-    public String regPage(){ return "register"; }
+    public String regPage() {
+        return "register";
+    }
 
     @PostMapping("/user/register")
-    public String doRegister(String username,String password,String nickname){
-        userService.register(username,password,nickname);
+    public String doRegister(String username, String password, String nickname) {
+        userService.register(username, password, nickname);
         return "redirect:/user/login";
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model){
-        UserDO u = (UserDO)session.getAttribute("loginUser");
+    public String dashboard(HttpSession session, Model model) {
+        UserDO u = (UserDO) session.getAttribute("loginUser");
         model.addAttribute("user", u);
         return "dashboard";
     }

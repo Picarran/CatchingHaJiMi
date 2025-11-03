@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <!-- 通用弹窗片段：参数(id, visible, title, content, primaryText, secondaryText) -->
+    <div th:fragment="modal(id, visible, title, content, primaryText, secondaryText)">
+        <div th:attr="id=${id}" class="modal" th:style="${visible} ? 'display:flex;' : 'display:none;'">
+            <div class="modal-content">
+                <h3 th:text="${title}" th:if="${title}"></h3>
+                <p th:utext="${content}"></p>
+                <div class="row">
+                    <button type="button" class="btn btn-primary" data-modal-close="true"
+                        th:text="${primaryText} ?: '确定'"></button>
+                    <button type="button" class="btn btn-outline" data-modal-close="true" th:if="${secondaryText}"
+                        th:text="${secondaryText}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

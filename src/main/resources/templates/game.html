@@ -4,18 +4,25 @@
 <head>
     <meta charset="UTF-8" />
     <title>游戏 - 点格子困猫</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/style.css(v=${#dates.createNow().time})}" />
 </head>
 
 <body>
-    <div class="container">
-        <h1>逮捕哈基米</h1>
-
-        <div id="game-area"></div>
-        <div class="legend" aria-label="图例">
-            <span class="legend-item"><span class="dot sample cat"></span> 猫</span>
-            <span class="legend-item"><span class="dot sample blocked"></span> 阻挡</span>
-            <span class="legend-item"><span class="dot sample"></span> 空格</span>
+    <div class="container game-container">
+        <div class="game-layout">
+            <div class="board-wrap">
+                <div id="game-area"></div>
+            </div>
+            <aside class="side-panel">
+                <h2>逮捕哈基米</h2>
+                <p class="muted">玩法：点击空格放置障碍，阻止猫到达边界。注意：猫只能沿“上/下/左/右”四个方向移动，不能斜着走。</p>
+                <p class="muted">提示：尽量封住最短路径，优先包围中心附近的空位。</p>
+                <div class="row" style="margin-top:10px">
+                    <button id="map-rect" class="btn btn-outline">矩形地图</button>
+                    <button id="map-diamond" class="btn btn-outline">菱形地图</button>
+                    <button id="map-circle" class="btn btn-outline">圆形地图</button>
+                </div>
+            </aside>
         </div>
 
         <div id="modal" class="modal" style="display:none;">
@@ -34,7 +41,7 @@
             var GAME_UUID = /*[[${gameUuid}]]*/ 'null';
             /*]]>*/
         </script>
-        <script th:src="@{/js/game.js}"></script>
+        <script th:src="@{/js/game.js(v=${#dates.createNow().time})}"></script>
     </div>
 </body>
 

@@ -23,19 +23,27 @@ public class GameController {
     private ObjectMapper objectMapper;
 
     @GetMapping("/game/start")
-    public String startGame(HttpServletRequest req){
+    public String startGame(HttpServletRequest req) {
         HttpSession session = req.getSession();
         UserDO u = (UserDO) session.getAttribute("loginUser");
-        if(u==null) return "redirect:/user/login";
+        if (u == null)
+            return "redirect:/user/login";
+        // optional level param: "1" (rect) or "2" (diamond)
+        String level = req.getParameter("level");
+        if (level != null) {
+            session.setAttribute("levelType", level);
+        }
         String gameUuid = gameService.startNewGame(session, u.getId());
-        return "redirect:/game/play/"+gameUuid;
+        return "redirect:/game/play/" + gameUuid;
     }
 
     @GetMapping("/game/play/{gameUuid}")
-    public String play(@PathVariable String gameUuid, HttpSession session, Model model) throws Exception{
+    public String play(@PathVariable String gameUuid, HttpSession session, Model model) throws Exception {
         GameState state = gameService.getGameStateFromSessionOrDb(session, gameUuid);
-        if(state==null){ model.addAttribute("mapJson","null"); model.addAttribute("gameUuid",gameUuid); }
-        else{
+        if (state == null) {
+            model.addAttribute("mapJson", "null");
+            model.addAttribute("gameUuid", gameUuid);
+        } else {
             String mapJson = objectMapper.writeValueAsString(state);
             model.addAttribute("mapJson", mapJson);
             model.addAttribute("gameUuid", gameUuid);
