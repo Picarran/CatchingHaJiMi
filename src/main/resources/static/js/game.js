@@ -125,22 +125,5 @@ document.addEventListener("DOMContentLoaded", function () {
     location.href = "/game/start?level=" + encodeURIComponent(level);
   });
 
-  var btnRect = document.getElementById("map-rect");
-  var btnDiamond = document.getElementById("map-diamond");
-  var btnCircle = document.getElementById("map-circle");
-  if (btnRect) {
-    btnRect.addEventListener("click", function () {
-      location.href = "/game/start?level=1";
-    });
-  }
-  if (btnDiamond) {
-    btnDiamond.addEventListener("click", function () {
-      location.href = "/game/start?level=2";
-    });
-  }
-  if (btnCircle) {
-    btnCircle.addEventListener("click", function () {
-      location.href = "/game/start?level=3";
-    });
-  }
+  // in-game map switching removed; selection happens on dashboard
 });

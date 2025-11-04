@@ -8,12 +8,114 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>欢迎，<span th:text="${user.nickname} ?: ${user.username}"></span></h1>
-        <div class="row">
-            <a class="btn btn-primary" th:href="@{/game/start}">开始新游戏</a>
-            <a class="btn btn-outline" th:href="@{/user/login}">登出（刷新会话以退出）</a>
+    <div class="container dash-big">
+        <div class="row" style="justify-content:space-between; margin-bottom:10px;">
+            <a class="btn btn-outline" th:href="@{/user/login}">登出</a>
+            <button id="open-leaderboard" class="btn btn-primary">排行榜</button>
         </div>
+        <h1>欢迎，<span th:text="${user.nickname} ?: ${user.username}"></span></h1>
+        <div class="row" style="margin-bottom:10px; justify-content:center; align-items:center;">
+            <span class="muted">选择地图开始游戏：</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px; align-items:center;">
+            <div class="row map-row" style="justify-content:center; align-items:center;">
+                <a class="btn btn-primary" th:href="@{/game/start(level=1)}">矩形地图</a>
+                <span class="best-cell">
+                    <span class="muted" th:if="${bestMap['1']} != null" th:text="|最佳步数：${bestMap['1']}|"></span>
+                    <span class="muted" th:if="${bestMap['1']} == null">未成功</span>
+                </span>
+            </div>
+            <div class="row map-row" style="justify-content:center; align-items:center;">
+                <a class="btn btn-outline" th:href="@{/game/start(level=2)}">菱形地图</a>
+                <span class="best-cell">
+                    <span class="muted" th:if="${bestMap['2']} != null" th:text="|最佳步数：${bestMap['2']}|"></span>
+                    <span class="muted" th:if="${bestMap['2']} == null">未成功</span>
+                </span>
+            </div>
+            <div class="row map-row" style="justify-content:center; align-items:center;">
+                <a class="btn btn-outline" th:href="@{/game/start(level=3)}">圆形地图</a>
+                <span class="best-cell">
+                    <span class="muted" th:if="${bestMap['3']} != null" th:text="|最佳步数：${bestMap['3']}|"></span>
+                    <span class="muted" th:if="${bestMap['3']} == null">未成功</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- 排行榜弹窗 -->
+        <div id="leaderboard-modal" class="modal" style="display:none;">
+            <div class="modal-content leaderboard-modal">
+                <div class="row" style="justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <h3 style="margin:0">排行榜</h3>
+                    <button class="btn btn-outline" data-modal-close="true">关闭</button>
+                </div>
+
+                <!-- 顶部切换选项 -->
+                <div class="tabs" role="tablist" style="margin-bottom:12px;">
+                    <button class="tab active" role="tab" aria-selected="true" data-tab="1">矩形地图</button>
+                    <button class="tab" role="tab" aria-selected="false" data-tab="2">菱形地图</button>
+                    <button class="tab" role="tab" aria-selected="false" data-tab="3">圆形地图</button>
+                </div>
+
+                <!-- 面板：仅显示当前所选地图的排行 -->
+                <div class="leaderboard-panels">
+                    <div class="leaderboard-panel active" data-tab-panel="1">
+                        <div th:if="${#lists.isEmpty(leaderboard['1'])}">暂无数据</div>
+                        <ol th:if="${!#lists.isEmpty(leaderboard['1'])}" style="margin:0; padding-left:20px;">
+                            <li th:each="row : ${leaderboard['1']}" th:text="|${row.username} - ${row.clicks} 步|"></li>
+                        </ol>
+                    </div>
+                    <div class="leaderboard-panel" data-tab-panel="2" style="display:none;">
+                        <div th:if="${#lists.isEmpty(leaderboard['2'])}">暂无数据</div>
+                        <ol th:if="${!#lists.isEmpty(leaderboard['2'])}" style="margin:0; padding-left:20px;">
+                            <li th:each="row : ${leaderboard['2']}" th:text="|${row.username} - ${row.clicks} 步|"></li>
+                        </ol>
+                    </div>
+                    <div class="leaderboard-panel" data-tab-panel="3" style="display:none;">
+                        <div th:if="${#lists.isEmpty(leaderboard['3'])}">暂无数据</div>
+                        <ol th:if="${!#lists.isEmpty(leaderboard['3'])}" style="margin:0; padding-left:20px;">
+                            <li th:each="row : ${leaderboard['3']}" th:text="|${row.username} - ${row.clicks} 步|"></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script th:src="@{/js/modal.js(v=${#dates.createNow().time})}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var btn = document.getElementById('open-leaderboard');
+                var modal = document.getElementById('leaderboard-modal');
+
+                // Tab switching logic
+                var tabButtons = document.querySelectorAll('#leaderboard-modal .tab');
+                var panels = document.querySelectorAll('#leaderboard-modal .leaderboard-panel');
+                function activateTab(tabId) {
+                    tabButtons.forEach(function (b) {
+                        var active = b.getAttribute('data-tab') === tabId;
+                        b.classList.toggle('active', active);
+                        b.setAttribute('aria-selected', active ? 'true' : 'false');
+                    });
+                    panels.forEach(function (p) {
+                        var show = p.getAttribute('data-tab-panel') === tabId;
+                        p.style.display = show ? '' : 'none';
+                        p.classList.toggle('active', show);
+                    });
+                }
+                tabButtons.forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        activateTab(btn.getAttribute('data-tab'));
+                    });
+                });
+
+                // Open modal: reset to first tab by default
+                if (btn && modal) {
+                    btn.addEventListener('click', function () {
+                        activateTab('1');
+                        modal.style.display = 'flex';
+                    });
+                }
+            });
+        </script>
     </div>
 </body>
 

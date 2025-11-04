@@ -1,6 +1,7 @@
 package org.picarran.catchinghajimi.controller;
 
 import org.picarran.catchinghajimi.entity.UserDO;
+import org.picarran.catchinghajimi.service.GameService;
 import org.picarran.catchinghajimi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private GameService gameService;
 
     @GetMapping("/user/login")
     public String loginPage() {
@@ -41,15 +44,27 @@ public class UserController {
     }
 
     @PostMapping("/user/register")
-    public String doRegister(String username, String password, String nickname) {
-        userService.register(username, password, nickname);
-        return "redirect:/user/login";
+    public String doRegister(String username, String password, String nickname, Model model) {
+        try {
+            userService.register(username, password, nickname);
+            return "redirect:/user/login";
+        } catch (org.springframework.dao.DuplicateKeyException e) {
+            model.addAttribute("error", "用户名已存在，请更换一个试试");
+            return "register";
+        } catch (Exception e) {
+            model.addAttribute("error", "注册失败，请稍后再试");
+            return "register";
+        }
     }
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
         UserDO u = (UserDO) session.getAttribute("loginUser");
         model.addAttribute("user", u);
+        if (u != null) {
+            model.addAttribute("bestMap", gameService.getBestClicksByLevel(u.getId()));
+            model.addAttribute("leaderboard", gameService.getLeaderboard());
+        }
         return "dashboard";
     }
 }

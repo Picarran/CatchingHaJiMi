@@ -47,6 +47,24 @@ public class GameController {
             String mapJson = objectMapper.writeValueAsString(state);
             model.addAttribute("mapJson", mapJson);
             model.addAttribute("gameUuid", gameUuid);
+            // best score for current map level
+            Object uo = session.getAttribute("loginUser");
+            if (uo instanceof org.picarran.catchinghajimi.entity.UserDO) {
+                org.picarran.catchinghajimi.entity.UserDO u = (org.picarran.catchinghajimi.entity.UserDO) uo;
+                java.util.Map<String, Integer> bestMap = gameService.getBestClicksByLevel(u.getId());
+                Integer best = bestMap.get(state.getLevelType());
+                if (best == null) {
+                    // try normalized keys if levelType like 'rect'/'diamond'/'circle'
+                    String lt = state.getLevelType();
+                    if ("rect".equalsIgnoreCase(lt))
+                        best = bestMap.get("1");
+                    else if ("diamond".equalsIgnoreCase(lt))
+                        best = bestMap.get("2");
+                    else if ("circle".equalsIgnoreCase(lt))
+                        best = bestMap.get("3");
+                }
+                model.addAttribute("bestClicks", best);
+            }
         }
         return "game";
     }

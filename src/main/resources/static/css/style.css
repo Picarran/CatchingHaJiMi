@@ -210,6 +210,54 @@ label {
     margin: 0 0 14px
 }
 
+/* Tabs (used in leaderboard modal) */
+.tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid rgba(148, 163, 184, .2);
+    padding-bottom: 8px;
+}
+
+.tab {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    border: 1px solid rgba(148, 163, 184, .2);
+    border-bottom-color: transparent;
+    padding: 8px 12px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: rgba(59, 130, 246, 0.12);
+    color: #e0eaff;
+    border-color: rgba(148, 163, 184, .35);
+}
+
+/* Fixed-size leaderboard modal with internal scroll */
+.modal-content.leaderboard-modal {
+    width: 520px;
+    max-width: 90vw;
+    height: 480px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content.leaderboard-modal .leaderboard-panels {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 6px;
+    padding-right: 6px;
+    /* avoid scrollbar overlay text */
+}
+
+.modal-content.leaderboard-modal .leaderboard-panel {
+    padding: 4px 0;
+}
+
 /* Buttons */
 button,
 .btn,
@@ -320,6 +368,18 @@ a:hover {
     color: var(--muted);
 }
 
+/* Dashboard map rows: fixed spacing between button and best score */
+.map-row .btn {
+    margin-right: 40px;
+}
+
+.best-cell {
+    display: inline-block;
+    min-width: 160px;
+    /* keep width stable regardless of digits or '未成功' */
+    text-align: left;
+}
+
 /* Alerts */
 .alert {
     padding: 12px 14px;
@@ -349,9 +409,18 @@ a:hover {
     }
 }
 
-/* =========================
-     Hakimi meme style tweaks
-     ========================= */
+.container.dash-big {
+    width: 80vw;
+    max-width: 80vw;
+    height: 80vh;
+    max-height: 80vh;
+    padding: 36px 32px;
+}
+
+.dash-big h1 {
+    font-size: 34px;
+    margin-bottom: 24px;
+}
 
 /* extra neon accents */
 :root {
@@ -538,4 +607,14 @@ a.btn:hover {
         max-width: 92vw;
         text-align: center;
     }
+}
+
+/* Dashboard larger center content */
+.dash-big .btn {
+    font-size: 18px;
+    padding: 12px 18px;
+}
+
+.dash-big .muted {
+    font-size: 16px;
 }

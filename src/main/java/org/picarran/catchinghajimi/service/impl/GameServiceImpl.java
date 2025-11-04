@@ -11,6 +11,7 @@ import org.picarran.catchinghajimi.entity.GameRecordDO;
 import org.picarran.catchinghajimi.entity.GameState;
 import org.picarran.catchinghajimi.entity.Point;
 import org.picarran.catchinghajimi.mapper.GameRecordMapper;
+import org.picarran.catchinghajimi.mapper.UserMapper;
 import org.picarran.catchinghajimi.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class GameServiceImpl implements GameService {
 
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     // locks per gameUuid to avoid concurrent modifications
     private final ConcurrentHashMap<String, Object> locks = new ConcurrentHashMap<>();
@@ -283,6 +286,93 @@ public class GameServiceImpl implements GameService {
 
     private boolean inBounds(int r, int c, int rows, int cols) {
         return r >= 0 && r < rows && c >= 0 && c < cols;
+    }
+
+    @Override
+    public Map<String, Integer> getBestClicksByLevel(Long userId) {
+        Map<String, Integer> best = new HashMap<>();
+        QueryWrapper<GameRecordDO> qw = new QueryWrapper<>();
+        qw.eq("user_id", userId).eq("result", "WIN").isNotNull("state_json");
+        List<GameRecordDO> list = gameRecordMapper.selectList(qw);
+        for (GameRecordDO rec : list) {
+            try {
+                GameState s = objectMapper.readValue(rec.getStateJson(), GameState.class);
+                String lt = s.getLevelType();
+                if (lt == null)
+                    lt = "1";
+                if ("rect".equalsIgnoreCase(lt))
+                    lt = "1";
+                else if ("diamond".equalsIgnoreCase(lt))
+                    lt = "2";
+                else if ("circle".equalsIgnoreCase(lt))
+                    lt = "3";
+                Integer clicks = rec.getClicks();
+                if (clicks == null)
+                    clicks = s.getClicks();
+                if (clicks != null) {
+                    best.merge(lt, clicks, Math::min);
+                }
+            } catch (Exception ignore) {
+            }
+        }
+        return best;
+    }
+
+    @Override
+    public Map<String, List<Map<String, Object>>> getLeaderboard() {
+        // level -> (userId -> best clicks)
+        Map<String, Map<Long, Integer>> bestByLevelUser = new HashMap<>();
+        QueryWrapper<GameRecordDO> qw = new QueryWrapper<>();
+        qw.eq("result", "WIN").isNotNull("state_json");
+        List<GameRecordDO> list = gameRecordMapper.selectList(qw);
+        for (GameRecordDO rec : list) {
+            try {
+                GameState s = objectMapper.readValue(rec.getStateJson(), GameState.class);
+                String lt = s.getLevelType();
+                if (lt == null)
+                    lt = "1";
+                if ("rect".equalsIgnoreCase(lt))
+                    lt = "1";
+                else if ("diamond".equalsIgnoreCase(lt))
+                    lt = "2";
+                else if ("circle".equalsIgnoreCase(lt))
+                    lt = "3";
+                Integer clicks = rec.getClicks();
+                if (clicks == null)
+                    clicks = s.getClicks();
+                if (clicks != null) {
+                    bestByLevelUser.computeIfAbsent(lt, k -> new HashMap<>())
+                            .merge(rec.getUserId(), clicks, Math::min);
+                }
+            } catch (Exception ignore) {
+            }
+        }
+        Map<String, List<Map<String, Object>>> leaderboard = new HashMap<>();
+        for (Map.Entry<String, Map<Long, Integer>> e : bestByLevelUser.entrySet()) {
+            String lt = e.getKey();
+            List<Map<String, Object>> entries = new ArrayList<>();
+            for (Map.Entry<Long, Integer> ue : e.getValue().entrySet()) {
+                Long uid = ue.getKey();
+                Integer clicks = ue.getValue();
+                String uname = null;
+                try {
+                    org.picarran.catchinghajimi.entity.UserDO u = userMapper.selectById(uid);
+                    if (u != null)
+                        uname = (u.getNickname() != null && !u.getNickname().isEmpty()) ? u.getNickname()
+                                : u.getUsername();
+                } catch (Exception ex) {
+                }
+                if (uname == null)
+                    uname = "用户" + uid;
+                Map<String, Object> row = new HashMap<>();
+                row.put("username", uname);
+                row.put("clicks", clicks);
+                entries.add(row);
+            }
+            entries.sort(Comparator.comparingInt(a -> (Integer) a.get("clicks")));
+            leaderboard.put(lt, entries);
+        }
+        return leaderboard;
     }
 
     private List<Point> neighbors(Point p, int rows, int cols, String levelType) {
