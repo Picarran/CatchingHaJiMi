@@ -27,6 +27,10 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String doLogin(HttpServletRequest req, String username, String password, Model model) {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+            model.addAttribute("error", "用户名和密码不能为空");
+            return "login";
+        }
         UserDO u = userService.loginByUsername(username, password);
         if (u == null) {
             model.addAttribute("error", "用户名或密码错误");
@@ -45,6 +49,11 @@ public class UserController {
 
     @PostMapping("/user/register")
     public String doRegister(String username, String password, String nickname, Model model) {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty() || nickname == null
+                || nickname.isEmpty()) {
+            model.addAttribute("error", "用户名、密码和昵称不能为空");
+            return "register";
+        }
         try {
             userService.register(username, password, nickname);
             return "redirect:/user/login";
