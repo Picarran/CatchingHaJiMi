@@ -1,4 +1,4 @@
--- SQL schema for 点格子困猫 (MySQL 5.7+)
+-- SQL schema for catchinghajimi (MySQL 5.7+)
 CREATE DATABASE IF NOT EXISTS catchinghajimi DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE catchinghajimi;
 
